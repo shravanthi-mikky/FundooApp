@@ -87,5 +87,49 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
+        public string ForgetPassword(string Email)
+        {
+            try
+            {
+                var emailCheck = userContext.UsersTable.FirstOrDefault(x => x.Email == Email);
+                if(emailCheck != null)
+                {
+                    var token = JwtMethod(emailCheck.Email, emailCheck.UserId);
+                    MSMQ_Model msmq_Model = new MSMQ_Model();
+                    msmq_Model.sendData2Queue(token);
+                    return token;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex){
+                throw;
+            }
+        }
+        //reset
+        public bool ResetPassword(string email, string password, string confirmpassword)
+        {
+            try
+            {
+                if (password.Equals(confirmpassword))
+                {
+                    UserEntity user = userContext.UsersTable.Where(e => e.Email == email).FirstOrDefault();
+                    user.Password = confirmpassword;
+                    userContext.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
-}
+} 
