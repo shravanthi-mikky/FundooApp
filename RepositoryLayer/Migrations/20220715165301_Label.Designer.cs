@@ -3,49 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepositoryLayer.Context;
 
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20220715165301_Label")]
+    partial class Label
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("RepositoryLayer.Entity.CollabEntity", b =>
-                {
-                    b.Property<long>("CollabId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CollabEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("NoteId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("notesNoteID")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("CollabId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("notesNoteID");
-
-                    b.ToTable("Collaborator");
-                });
 
             modelBuilder.Entity("RepositoryLayer.Entity.LabelEntity", b =>
                 {
@@ -141,19 +115,6 @@ namespace RepositoryLayer.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("UsersTable");
-                });
-
-            modelBuilder.Entity("RepositoryLayer.Entity.CollabEntity", b =>
-                {
-                    b.HasOne("RepositoryLayer.Entity.UserEntity", "user")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RepositoryLayer.Entity.NoteEntity", "notes")
-                        .WithMany()
-                        .HasForeignKey("notesNoteID");
                 });
 
             modelBuilder.Entity("RepositoryLayer.Entity.LabelEntity", b =>

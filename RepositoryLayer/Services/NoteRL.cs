@@ -1,6 +1,11 @@
-﻿using CommonLayer.Model;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using CommonLayer.Model;
+using Elastic.Apm.Api;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Services.Account;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interfaces;
@@ -17,6 +22,10 @@ namespace RepositoryLayer.Services
     {
         UserContext userContext;
         private readonly IConfiguration config;
+        public const string CLOUD_NAME = "dllwl9r5g";
+        public const string API_KEY = "567743519167846";
+        public const string API_Secret = "SNjQp4L708GuLvrHz2o9qYQH-Nc";
+        public static Cloudinary cloud;
         public NoteRL(UserContext userContext, IConfiguration config)
         {
             this.userContext = userContext;
@@ -160,6 +169,58 @@ namespace RepositoryLayer.Services
                 }
                 result.IsTrash = true;
                 this.userContext.SaveChanges();
+                return null;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        
+        public NoteEntity UploadImage(long noteid, IFormFile img)
+        {
+            try
+            {
+                var noteId = this.userContext.Notes.FirstOrDefault(e => e.NoteID == noteid);
+                if (noteId != null)
+                {
+                    CloudinaryDotNet.Account acc = new CloudinaryDotNet.Account(CLOUD_NAME, API_KEY, API_Secret);
+                    Cloudinary cloud = new Cloudinary(acc);
+                    var imagePath = img.OpenReadStream();
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(img.FileName, imagePath)
+                    };
+                    var uploadresult = cloud.Upload(uploadParams);
+                    noteId.Image = img.FileName;
+                    userContext.Notes.Update(noteId);
+                    int upload = userContext.SaveChanges();
+                    if (upload > 0)
+                    {
+                        return noteId;
+                    }
+                }
+                return null;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public NoteEntity Color(long noteid, string color)
+        {
+            try
+            {
+                NoteEntity note = this.userContext.Notes.FirstOrDefault(x => x.NoteID == noteid);
+                if (note.Color != null)
+                {
+                    note.Color = color;
+                    this.userContext.SaveChanges();
+                    return note;
+                }
                 return null;
             }
             catch (Exception)
