@@ -15,7 +15,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using PowerArgs;
 using RepositoryLayer.Context;
 using RepositoryLayer.Interfaces;
 using RepositoryLayer.Services;
@@ -49,6 +48,9 @@ namespace FundooApplication
             services.AddTransient<INoteBL, NoteBL>();
             services.AddTransient<INoteRL, NoteRL>();
 
+            services.AddTransient<ILabelBL, LabelBL>();
+            services.AddTransient<ILabelRL, LabelRL>();
+
             //authentication
             services.AddSwaggerGen(c =>
             {
@@ -71,19 +73,10 @@ namespace FundooApplication
                 {
                  { jwtSecurityScheme, Array.Empty<string>() }
                 });
-
             });
-
-
             var tokenKey = Configuration.GetValue<string>("Jwt:Key");
-
             var key = Encoding.ASCII.GetBytes(tokenKey);
-
-
-
-
             services.AddAuthentication(x =>
-
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;

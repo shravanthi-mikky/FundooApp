@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interfaces;
 using CommonLayer.Model;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
@@ -31,7 +32,6 @@ namespace FundooApplication.Controllers
             try
             {
                 long userid = Convert.ToInt32(User.Claims.First(e => e.Type == "id").Value);
-                //long userid = User.FindFirst(ClaimTypes.UserId).Value;
 
                 var result = noteBL.AddNote(addnote, userid);
                 if (result != null)
@@ -92,7 +92,7 @@ namespace FundooApplication.Controllers
         }
 
         [Authorize]
-        [HttpGet("ByUser")]
+        [HttpGet("UserId")]
         public IEnumerable<NoteEntity> GetAllNotesbyuser(long userid)
         {
             try
@@ -119,7 +119,7 @@ namespace FundooApplication.Controllers
             }
         }
         [Authorize]
-        [HttpPut("Pin")]
+        [HttpPut("IsPin")]
         public IActionResult Ispinornot(long noteid)
         {
             try
@@ -142,7 +142,7 @@ namespace FundooApplication.Controllers
         }
 
         [Authorize]
-        [HttpPut("Trash")]
+        [HttpPut("IsTrash")]
         public IActionResult Istrashornot(long noteid)
         {
             try
@@ -165,7 +165,7 @@ namespace FundooApplication.Controllers
         }
 
         [Authorize]
-        [HttpPut("Archive")]
+        [HttpPut("IsArchive")]
         public IActionResult IsArchiveOrNot(long noteid)
         {
             try
@@ -178,6 +178,51 @@ namespace FundooApplication.Controllers
                 else
                 {
                     return this.BadRequest(new { message = "Note Archived Successfully" });
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        [Authorize]
+        [HttpPut("Color")]
+        public IActionResult Color(long noteid, string color)
+        {
+            try
+            {
+                var result = noteBL.Color(noteid, color);
+                if (result != null)
+                {
+                    return this.Ok(new { message = "Color is changed ", Response = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { message = "Unable to change color" });
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        [Authorize]
+        [HttpPut("Upload")]
+        public IActionResult UploadImage(long noteid, IFormFile img)
+        {
+            try
+            {
+                var result = noteBL.UploadImage(noteid, img);
+                if (result != null)
+                {
+                    return this.Ok(new { message = "uploaded ", Response = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { message = "Not uploaded" });
                 }
             }
             catch (Exception)
