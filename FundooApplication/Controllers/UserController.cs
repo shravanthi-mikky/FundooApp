@@ -9,7 +9,10 @@ using System.Security.Claims;
 
 namespace FundooApplication.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+   // [ApiController]
+
+    [Microsoft.AspNetCore.Components.Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
