@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace RepositoryLayer.Services
 {
@@ -30,7 +31,7 @@ namespace RepositoryLayer.Services
                 userEntity.FirstName = userRegistrationModel.FirstName;
                 userEntity.LastName = userRegistrationModel.LastName;
                 userEntity.Email = userRegistrationModel.Email;
-                userEntity.Password = userRegistrationModel.Password;
+                userEntity.Password = EncryptPass(userRegistrationModel.Password);
                 userContext.UsersTable.Add(userEntity);
                 int result= userContext.SaveChanges();
                 if (result > 0)
@@ -45,6 +46,44 @@ namespace RepositoryLayer.Services
                 throw;
             } 
         }
+        //Encryt/decrypt methods
+
+        public string Decrpt(string encodedData)
+        {
+            try
+            {
+                System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+                System.Text.Decoder utf8Decode = encoder.GetDecoder();
+                byte[] todecode_byte = Convert.FromBase64String(encodedData);
+                int charCount = utf8Decode.GetCharCount(todecode_byte, 0, todecode_byte.Length);
+                char[] decoded_char = new char[charCount];
+                utf8Decode.GetChars(todecode_byte, 0, todecode_byte.Length, decoded_char, 0);
+                string result = new String(decoded_char);
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public string EncryptPass(string password)
+        {
+            try
+            {
+                string msg = "";
+                byte[] encode = new byte[password.Length];
+                encode = Encoding.UTF8.GetBytes(password);
+                msg = Convert.ToBase64String(encode);
+                return msg;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public string JwtMethod(string email, long id)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -69,12 +108,14 @@ namespace RepositoryLayer.Services
             // 5. Return Token from method
             return tokenHandler.WriteToken(token);
         }
+        
         public string Login(UserLoginModel userLoginModel)
         {
             try
             {
-                var loginData = userContext.UsersTable.SingleOrDefault(x => x.Email == userLoginModel.Email && x.Password == userLoginModel.Password);
-                if (loginData != null)
+                var loginData = userContext.UsersTable.SingleOrDefault(x => x.Email == userLoginModel.Email );
+                string pswd = Decrpt(loginData.Password);
+                if (loginData != null && pswd == userLoginModel.Password)
                 {
                     var token = JwtMethod(loginData.Email, loginData.UserId);
                     return token;
