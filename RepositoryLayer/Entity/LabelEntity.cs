@@ -13,9 +13,9 @@ namespace RepositoryLayer.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long LabelId { get; set; }
         public string LabelName { get; set; }
-        [ForeignKey("UsersTable")]
+        [ForeignKey("user")]
         public long Userid { get; set; }
-        [ForeignKey("Notes")]
+        [ForeignKey("notes")]
         public long Noteid { get; set; }
 
         [JsonIgnore]

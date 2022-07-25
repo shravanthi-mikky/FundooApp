@@ -20,7 +20,8 @@ namespace FundooApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
+    //[Microsoft.AspNetCore.Components.Route("api/[controller]")]
+    //[ApiController]
 
     public class NoteController : ControllerBase
     {
@@ -57,7 +58,7 @@ namespace FundooApplication.Controllers
             }
         }
         [Authorize]
-        [HttpDelete("Remove")]
+        [HttpDelete("{NoteId}/Remove")]
         public IActionResult DeleteNotes(long noteid)
         {
             try
@@ -77,7 +78,7 @@ namespace FundooApplication.Controllers
             }
         }
         [Authorize]
-        [HttpPut("Update")]
+        [HttpPut("{NoteId}/Update")]
         public IActionResult updateNotes(NoteModel addnote, long noteid)
         {
             try
@@ -100,7 +101,7 @@ namespace FundooApplication.Controllers
         }
 
         [Authorize]
-        [HttpGet("UserId")]
+        [HttpGet("{UserId}")]
         public IEnumerable<NoteEntity> GetAllNotesbyuser(long userid)
         {
             try
@@ -152,7 +153,7 @@ namespace FundooApplication.Controllers
             return Ok(NotesList);
         }
         [Authorize]
-        [HttpPut("IsPin")]
+        [HttpPut("{NoteId}/IsPin")]
         public IActionResult Ispinornot(long noteid)
         {
             try
@@ -175,7 +176,7 @@ namespace FundooApplication.Controllers
         }
 
         [Authorize]
-        [HttpPut("IsTrash")]
+        [HttpPut("{NoteId}/IsTrash")]
         public IActionResult Istrashornot(long noteid)
         {
             try
@@ -198,7 +199,7 @@ namespace FundooApplication.Controllers
         }
 
         [Authorize]
-        [HttpPut("IsArchive")]
+        [HttpPut("{NoteId}/IsArchive")]
         public IActionResult IsArchiveOrNot(long noteid)
         {
             try
@@ -220,7 +221,7 @@ namespace FundooApplication.Controllers
             }
         }
         [Authorize]
-        [HttpPut("Color")]
+        [HttpPut("{NoteId}/Color")]
         public IActionResult Color(long noteid, string color)
         {
             try
@@ -243,7 +244,7 @@ namespace FundooApplication.Controllers
         }
 
         [Authorize]
-        [HttpPut("Upload")]
+        [HttpPut("{NoteId}/Upload")]
         public IActionResult UploadImage(long noteid, IFormFile img)
         {
             try
