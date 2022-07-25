@@ -24,7 +24,7 @@ namespace RepositoryLayer.Services
                 Entity.LabelName = label;
                 Entity.Userid = userid;
                 Entity.Noteid = noteid;
-                this.context.Label.Add(Entity);
+                this.context.LabelTable.Add(Entity);
                 int result = this.context.SaveChanges();
                 if (result > 0)
                 {
@@ -41,13 +41,13 @@ namespace RepositoryLayer.Services
 
         public IEnumerable<LabelEntity> GetlabelsByNoteid(long noteid, long userid)
         {
-            return context.Label.Where(e => e.Noteid == noteid && e.Userid == userid).ToList();
+            return context.LabelTable.Where(e => e.Noteid == noteid && e.Userid == userid).ToList();
         }
         public bool RemoveLabel(long userID, string labelName)
         {
             try
             {
-                var result = this.context.Label.FirstOrDefault(x => x.Userid == userID && x.LabelName == labelName);
+                var result = this.context.LabelTable.FirstOrDefault(x => x.Userid == userID && x.LabelName == labelName);
                 if (result != null)
                 {
                     context.Remove(result);
@@ -65,7 +65,7 @@ namespace RepositoryLayer.Services
         public IEnumerable<LabelEntity> RenameLabel(long userID, string oldLabelName, string labelName)
         {
             IEnumerable<LabelEntity> labels;
-            labels = context.Label.Where(x => x.Userid == userID && x.LabelName == oldLabelName).ToList();
+            labels = context.LabelTable.Where(x => x.Userid == userID && x.LabelName == oldLabelName).ToList();
             if (labels != null)
             {
                 foreach (var newlabel in labels)

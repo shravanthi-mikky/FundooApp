@@ -128,7 +128,7 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
-        public string ForgetPassword(string Email)
+        public string ForgetPassword(string Email) 
         {
             try
             {

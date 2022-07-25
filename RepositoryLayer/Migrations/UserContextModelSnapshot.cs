@@ -35,16 +35,13 @@ namespace RepositoryLayer.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("notesNoteID")
-                        .HasColumnType("bigint");
-
                     b.HasKey("CollabId");
+
+                    b.HasIndex("NoteId");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("notesNoteID");
-
-                    b.ToTable("Collaborator");
+                    b.ToTable("CollaboratorTable");
                 });
 
             modelBuilder.Entity("RepositoryLayer.Entity.LabelEntity", b =>
@@ -63,16 +60,13 @@ namespace RepositoryLayer.Migrations
                     b.Property<long>("Userid")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("notesNoteID")
-                        .HasColumnType("bigint");
-
                     b.HasKey("LabelId");
+
+                    b.HasIndex("Noteid");
 
                     b.HasIndex("Userid");
 
-                    b.HasIndex("notesNoteID");
-
-                    b.ToTable("Label");
+                    b.ToTable("LabelTable");
                 });
 
             modelBuilder.Entity("RepositoryLayer.Entity.NoteEntity", b =>
@@ -145,28 +139,32 @@ namespace RepositoryLayer.Migrations
 
             modelBuilder.Entity("RepositoryLayer.Entity.CollabEntity", b =>
                 {
+                    b.HasOne("RepositoryLayer.Entity.NoteEntity", "notes")
+                        .WithMany()
+                        .HasForeignKey("NoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RepositoryLayer.Entity.UserEntity", "user")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("RepositoryLayer.Entity.NoteEntity", "notes")
-                        .WithMany()
-                        .HasForeignKey("notesNoteID");
                 });
 
             modelBuilder.Entity("RepositoryLayer.Entity.LabelEntity", b =>
                 {
+                    b.HasOne("RepositoryLayer.Entity.NoteEntity", "notes")
+                        .WithMany()
+                        .HasForeignKey("Noteid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RepositoryLayer.Entity.UserEntity", "user")
                         .WithMany()
                         .HasForeignKey("Userid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("RepositoryLayer.Entity.NoteEntity", "notes")
-                        .WithMany()
-                        .HasForeignKey("notesNoteID");
                 });
 
             modelBuilder.Entity("RepositoryLayer.Entity.NoteEntity", b =>

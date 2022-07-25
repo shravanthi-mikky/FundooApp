@@ -2,53 +2,52 @@
 
 namespace RepositoryLayer.Migrations
 {
-    public partial class Label : Migration
+    public partial class LabelTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Label",
+                name: "LabelTable",
                 columns: table => new
                 {
                     LabelId = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LabelName = table.Column<string>(nullable: true),
                     Userid = table.Column<long>(nullable: false),
-                    Noteid = table.Column<long>(nullable: false),
-                    notesNoteID = table.Column<long>(nullable: true)
+                    Noteid = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Label", x => x.LabelId);
+                    table.PrimaryKey("PK_LabelTable", x => x.LabelId);
                     table.ForeignKey(
-                        name: "FK_Label_UsersTable_Userid",
+                        name: "FK_LabelTable_Notes_Noteid",
+                        column: x => x.Noteid,
+                        principalTable: "Notes",
+                        principalColumn: "NoteID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LabelTable_UsersTable_Userid",
                         column: x => x.Userid,
                         principalTable: "UsersTable",
                         principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Label_Notes_notesNoteID",
-                        column: x => x.notesNoteID,
-                        principalTable: "Notes",
-                        principalColumn: "NoteID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Label_Userid",
-                table: "Label",
-                column: "Userid");
+                name: "IX_LabelTable_Noteid",
+                table: "LabelTable",
+                column: "Noteid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Label_notesNoteID",
-                table: "Label",
-                column: "notesNoteID");
+                name: "IX_LabelTable_Userid",
+                table: "LabelTable",
+                column: "Userid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Label");
+                name: "LabelTable");
         }
     }
 }

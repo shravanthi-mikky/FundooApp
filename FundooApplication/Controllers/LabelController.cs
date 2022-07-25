@@ -83,7 +83,7 @@ namespace FundooApplication.Controllers
                 throw;
             }
         }
-        [HttpGet("UserId")]
+        [HttpGet("userId")]
         public IEnumerable<LabelEntity> GetByuserid(long noteid)
         {
             try

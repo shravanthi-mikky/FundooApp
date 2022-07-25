@@ -24,7 +24,7 @@ namespace RepositoryLayer.Services
                 Entity.CollabEmail = email;
                 Entity.UserId = userid;
                 Entity.NoteId = noteid;
-                this.context.Collaborator.Add(Entity);
+                this.context.CollaboratorTable.Add(Entity);//CollaboratorTable
                 int result = this.context.SaveChanges();
                 if (result > 0)
                 {
@@ -43,7 +43,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var result = this.context.Collaborator.FirstOrDefault(x => x.CollabId == collabid);
+                var result = this.context.CollaboratorTable.FirstOrDefault(x => x.CollabId == collabid);//CollaboratorTable
                 context.Remove(result);
                 int deletednote = this.context.SaveChanges();
                 if (deletednote > 0)
@@ -59,7 +59,7 @@ namespace RepositoryLayer.Services
         }
         public IEnumerable<CollabEntity> GetAllByNoteID(long noteid)
         {
-            return context.Collaborator.Where(n => n.NoteId == noteid).ToList();
+            return context.CollaboratorTable.Where(n => n.NoteId == noteid).ToList();//CollaboratorTable
         }
     }
 }
