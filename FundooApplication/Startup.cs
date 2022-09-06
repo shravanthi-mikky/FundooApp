@@ -58,6 +58,15 @@ namespace FundooApplication
             {
                 options.Configuration = "localhost:6379";
             });
+            //cors
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                name: "AllowOrigin",
+              builder => {
+                  builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+              });
+            });
 
             //authentication
             services.AddSwaggerGen(c =>
@@ -124,6 +133,8 @@ namespace FundooApplication
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("AllowOrigin");
 
             app.UseAuthentication();
             app.UseAuthorization();

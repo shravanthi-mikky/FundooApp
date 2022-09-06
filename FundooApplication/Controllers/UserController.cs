@@ -3,27 +3,33 @@ using CommonLayer.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using NLog;
+using RepositoryLayer.Entity;
 using System;
 using System.Linq;
 using System.Security.Claims;
 
 namespace FundooApplication.Controllers
 {
-    //[Route("api/[controller]")]
-   // [ApiController]
 
     [Microsoft.AspNetCore.Components.Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
+        UserEntity userEntity;
+       
         IUserBL iUserBL;
-        public UserController(IUserBL iUserBL)
+        private readonly ILogger<UserController> logger;
+        public UserController(IUserBL iUserBL, ILogger<UserController> logger)
         {
             this.iUserBL = iUserBL;
+            this.logger = logger;
         }
         [HttpPost("Register")]
         public IActionResult Register(UserRegistrationModel userRegistrationModel)
         {
+            
             try
             {
                 var result= iUserBL.Register(userRegistrationModel);
@@ -38,6 +44,7 @@ namespace FundooApplication.Controllers
             }
             catch(Exception e)
             {
+                
                 throw;
             }
         }
@@ -49,12 +56,14 @@ namespace FundooApplication.Controllers
                 var result = iUserBL.Login(userLoginModel);
                 if (result != null)
                 {
+                    logger.LogInformation("You have logged in sucessfully");
                     return this.Ok(new
                     {
                         Success = true,
                         message = "Login Successfull",
-                        token = result
-                    }  
+                        token = result,
+                       // userid = userEntity.UserId
+                    }
                         );
                 }
                 else
@@ -67,8 +76,9 @@ namespace FundooApplication.Controllers
                 }
 
             }
-            catch
+            catch( Exception e )
             {
+                logger.LogError(e.ToString());
                 throw;
             }
         }
