@@ -20,8 +20,7 @@ namespace FundooApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Microsoft.AspNetCore.Components.Route("api/[controller]")]
-    //[ApiController]
+    [Authorize]
 
     public class NoteController : ControllerBase
     {
@@ -34,7 +33,7 @@ namespace FundooApplication.Controllers
             this.context = context;
             this.distributedCache = distributedCache;
         }
-        [Authorize]
+       // [Authorize]
         [HttpPost("Add")]
         public IActionResult AddNotes(NoteModel addnote)
         {
@@ -57,8 +56,8 @@ namespace FundooApplication.Controllers
                 throw;
             }
         }
-        [Authorize]
-        [HttpDelete("{NoteId}/Remove")]
+        //[Authorize]
+        [HttpDelete("{noteid}/Remove")]
         public IActionResult DeleteNotes(long noteid)
         {
             try
@@ -77,8 +76,8 @@ namespace FundooApplication.Controllers
                 throw;
             }
         }
-        [Authorize]
-        [HttpPut("{NoteId}/Update")]
+        //[Authorize]
+        [HttpPut("{noteid}/Update")]
         public IActionResult updateNotes(NoteModel addnote, long noteid)
         {
             try
@@ -100,8 +99,8 @@ namespace FundooApplication.Controllers
             }
         }
 
-        [Authorize]
-        [HttpGet("{UserId}")]
+        //[Authorize]
+        [HttpGet("{userid}")]
         public IEnumerable<NoteEntity> GetAllNotesbyuser(long userid)
         {
             try
@@ -114,7 +113,7 @@ namespace FundooApplication.Controllers
             }
         }
 
-        [Authorize]
+       // [Authorize]
         [HttpGet("AllNotes")]
         public IEnumerable<NoteEntity> GetAllNote()
         {
@@ -152,8 +151,8 @@ namespace FundooApplication.Controllers
             }
             return Ok(NotesList);
         }
-        [Authorize]
-        [HttpPut("{NoteId}/IsPin")]
+       // [Authorize]
+        [HttpPut("{noteid}/IsPin")]
         public IActionResult Ispinornot(long noteid)
         {
             try
@@ -175,8 +174,8 @@ namespace FundooApplication.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPut("{NoteId}/IsTrash")]
+        //[Authorize]
+        [HttpPut("{noteid}/IsTrash")]
         public IActionResult Istrashornot(long noteid)
         {
             try
@@ -198,8 +197,8 @@ namespace FundooApplication.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPut("{NoteId}/IsArchive")]
+        //[Authorize]
+        [HttpPut("{noteid}/IsArchive")]
         public IActionResult IsArchiveOrNot(long noteid)
         {
             try
@@ -220,8 +219,9 @@ namespace FundooApplication.Controllers
                 throw;
             }
         }
-        [Authorize]
-        [HttpPut("{NoteId}/Color")]
+        //[Authorize]
+        [HttpPut("{noteid}/Color")]
+        //[HttpPut("Color")]
         public IActionResult Color(long noteid, string color)
         {
             try
@@ -243,8 +243,8 @@ namespace FundooApplication.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPut("{NoteId}/Upload")]
+        //[Authorize]
+        [HttpPut("{noteid}/Upload")]
         public IActionResult UploadImage(long noteid, IFormFile img)
         {
             try
@@ -261,7 +261,6 @@ namespace FundooApplication.Controllers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

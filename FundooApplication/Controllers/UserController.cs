@@ -5,19 +5,19 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NLog;
+using RepositoryLayer.Entity;
 using System;
 using System.Linq;
 using System.Security.Claims;
 
 namespace FundooApplication.Controllers
 {
-    //[Route("api/[controller]")]
-   // [ApiController]
 
     [Microsoft.AspNetCore.Components.Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
+        UserEntity userEntity;
        
         IUserBL iUserBL;
         private readonly ILogger<UserController> logger;
@@ -61,8 +61,9 @@ namespace FundooApplication.Controllers
                     {
                         Success = true,
                         message = "Login Successfull",
-                        token = result
-                    }  
+                        token = result,
+                       // userid = userEntity.UserId
+                    }
                         );
                 }
                 else
